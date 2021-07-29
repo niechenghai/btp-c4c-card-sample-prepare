@@ -18,7 +18,7 @@ sap.ui.define([
 
             api: {
                 card: "/svc/card/recognition",
-                c4c: "/svc/c4c/createCustomer"
+                // c4c: "/svc/c4c/createCustomer"
             },
 
 
@@ -105,43 +105,71 @@ sap.ui.define([
             onSaveCard: function(oEvent) {
                 var card = this.oUIModel.getData().cardInfo;
                 Log.info("=========card info: ", card);
-
+                var notNull = function(arr) {
+                    return arr && arr.length > 0 ? arr[0] : "";
+                }
                 var customer = {
-                    name: card.NAME && card.NAME.length > 0 ? card.NAME[0] : "",
-                    title: card.TITLE && card.TITLE.length > 0 ? card.TITLE[0] : "",
-                    company: card.COMPANY && card.COMPANY.length > 0 ? card.COMPANY[0] : "",
-                    addr: card.ADDR && card.ADDR.length > 0 ? card.ADDR[0] : "",
-                    pc: card.PC && card.PC.length > 0 ? card.PC[0] : "",
-                    mobile: card.MOBILE && card.MOBILE.length > 0 ? card.MOBILE[0] : "",
-                    tel: card.TEL && card.TEL.length > 0 ? card.TEL[0] : "",
-                    fax: card.FAX && card.FAX.length > 0 ? card.FAX[0] : "",
-                    email: card.EMAIL && card.EMAIL.length > 0 ? card.EMAIL[0] : "",
-                    url: card.URL && card.URL.length > 0 ? card.URL[0] : "",
+                    name: notNull(card.NAME),
+                    title: notNull(card.TITLE),
+                    company: notNull(card.COMPANY),
+                    addr: notNull(card.ADDR),
+                    pc: notNull(card.PC),
+                    mobile: notNull(card.MOBILE),
+                    tel: notNull(card.TEL),
+                    fax: notNull(card.FAX),
+                    email: notNull(card.EMAIL),
+                    url: notNull(card.URL),
                 };
 
                 this.oUIModel.setProperty("/savingCustomer", true);
 
-                this.getAccessToken(function(csrfToken) {
-                    jQuery.ajax({
-                        async: true,
-                        url: this.api.c4c,
-                        type: "post",
-                        headers: {"X-CSRF-Token": csrfToken},
-                        data: JSON.stringify(customer),
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json"
-                    }).done(function(data, textStatus, jqXHR) {
-                        console.log(data, textStatus);
-                        if (data) {
-                            MessageToast.show("创建成功！", {duration: 2000});
-                        } else {
-                            MessageToast.show("创建失败！", {duration: 2000});
-                        }
-                    }.bind(this)).always(function(jqXHR, textStatus) {
-                        console.log(jqXHR, textStatus);
+                // this.getAccessToken(function(csrfToken) {
+                //     jQuery.ajax({
+                //         async: true,
+                //         url: this.api.c4c,
+                //         type: "post",
+                //         headers: {"X-CSRF-Token": csrfToken},
+                //         data: JSON.stringify(customer),
+                //         contentType: "application/json; charset=utf-8",
+                //         dataType: "json"
+                //     }).done(function(data, textStatus, jqXHR) {
+                //         console.log(data, textStatus);
+                //         if (data) {
+                //             MessageToast.show("创建成功！", {duration: 2000});
+                //         } else {
+                //             MessageToast.show("创建失败！", {duration: 2000});
+                //         }
+                //     }.bind(this)).always(function(jqXHR, textStatus) {
+                //         console.log(jqXHR, textStatus);
+                //         this.oUIModel.setProperty("/savingCustomer", false);
+                //     }.bind(this));
+                // }.bind(this));
+
+                // For C4C request
+                var oDataModel = this.getOwnerComponent().getModel();
+                var postData = {
+                    "LastName": customer.name,
+                    "FirstName": customer.name,
+                    "Phone": customer.tel,
+                    "Email": customer.email,
+                    "Fax": customer.fax,
+                    "Mobile": customer.mobile,
+                    "WebSite": customer.url
+                };
+                
+                oDataModel.create("/IndividualCustomerCollection", postData, {
+                    success: function(data, oRes) {
+                        console.log(data);
                         this.oUIModel.setProperty("/savingCustomer", false);
-                    }.bind(this));
-                }.bind(this));
+                        MessageToast.show("Create success!");
+                        
+                    }.bind(this),
+                    error: function(oError) {
+                        console.log(oError);
+                        this.oUIModel.setProperty("/savingCustomer", false);
+                        MessageToast.show("Create failed!");
+                    }.bind(this)
+                });
 
             },
 

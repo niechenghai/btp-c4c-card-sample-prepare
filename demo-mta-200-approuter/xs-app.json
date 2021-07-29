@@ -6,6 +6,11 @@
         "source": "^/svc/(.*)",
         "target": "/$1",
         "destination": "srv-api"
+    },
+    {
+        "source": "^/c4c/(.*)",
+        "target": "/$1",
+        "destination": "C4C_FOR_CARD"
     }
   ]
 }
