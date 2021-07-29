@@ -3,11 +3,6 @@
   "welcomeFile": "/uipart/",
   "routes": [
     {
-        "source": "^/c4cforcard/(.*)",
-        "target": "/$1",
-        "destination": "C4C_FOR_CARD"
-    },
-    {
         "source": "^/svc/(.*)",
         "target": "/$1",
         "destination": "srv-api"
