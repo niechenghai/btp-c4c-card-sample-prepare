@@ -154,7 +154,9 @@ sap.ui.define([
                     "Email": customer.email,
                     "Fax": customer.fax,
                     "Mobile": customer.mobile,
-                    "WebSite": customer.url
+                    "WebSite": customer.url,
+                    "CustomerABCClassificationCode": "A",
+                    "RoleCode": "CRM000",
                 };
                 
                 oDataModel.create("/IndividualCustomerCollection", postData, {
