@@ -1,0 +1,11 @@
+{
+  "authenticationMethod": "none",
+  "welcomeFile": "/uipart/",
+  "routes": [
+    {
+        "source": "^/svc/(.*)",
+        "target": "/$1",
+        "destination": "srv-api"
+    }
+  ]
+}

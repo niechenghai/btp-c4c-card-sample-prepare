@@ -1,0 +1,98 @@
+_schema-version: '3.2'
+ID: demo_mta_200
+version: 0.0.6
+modules:
+  - name: demo_mta_200-app-content
+    type: com.sap.application.content
+    path: .
+    requires:
+      - name: demo_mta_200-repo-host
+        parameters:
+          content-target: true
+    build-parameters:
+      build-result: resources
+      requires:
+        - artifacts:
+            - uipart.zip
+          name: uipart
+          target-path: resources/
+  - name: uipart
+    type: html5
+    path: uipart
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - 'npm run build:cf'
+      supported-platforms: []
+  - name: srvpart
+    type: java
+    path: srvpart
+    build-parameters:
+      build-result: application/target/*.jar
+      builder: maven
+    requires:
+      - name: demo_mta_200-dest-srv
+    provides:
+      - name: srv-binding
+        public: false
+        properties:
+          srv-url: ${default-url}
+
+  - name: demo-mta-200-approuter
+    type: approuter.nodejs
+    path: demo-mta-200-approuter
+    requires:
+      - name: demo_mta_200_html_repo_runtime
+      - name: demo_mta_200-dest-srv
+      - name: srv-binding
+        group: destinations
+        properties:
+          name: srv-api
+          url: ~{srv-url}
+    parameters:
+      disk-quota: 256M
+      memory: 256M
+    build-parameters:
+      build-result: .
+      ignore: [".gitignore", "node_modules/"]
+  # - name: demo_mta_200_ui_deployer
+  #   type: com.sap.application.content
+  #   path: .
+  #   requires:
+  #     - name: demo_mta_200-repo-host
+  #       parameters:
+  #         content-target: true
+resources:
+  - name: demo_mta_200-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-name: demo_mta_200-html5-srv
+      service-plan: app-host
+  - name: demo_mta_200-dest-srv
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+        init_data:
+          instance:
+            destinations:
+              - Authentication: NoAuthentication
+                Name: ui5
+                ProxyType: Internet
+                Type: HTTP
+                URL: 'https://ui5.sap.com'
+            existing_destinations_policy: update
+        version: 1.0.0
+      service: destination
+      service-name: demo_mta_200-dest-srv
+      service-plan: lite
+  - name: demo_mta_200_html_repo_runtime
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-runtime
+parameters:
+  deploy_mode: html5-repo

@@ -1,0 +1,108 @@
+<mvc:View
+    controllerName="uipart.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:u="sap.ui.unified"
+>
+    <Shell id="shell">
+        <App id="app">
+            <pages>
+                <Page id="page" title="{i18n>title}">
+                    <content>
+                        <VBox alignItems="Center" alignContent="Center" >
+                            <Image
+                                id="cardImage"
+                                src="{UIModel>/snapshot}"
+                                busy="{UIModel>/loadingImage}"
+                                visible="{= !${UIModel>/showCamera} }"
+                                densityAware="false"
+                                height="300px" >
+                                <layoutData>
+                                    <FlexItemData growFactor="1" />
+                                </layoutData>
+                            </Image>
+                            <HBox visible="{= !${UIModel>/showCamera} }">
+                                <u:FileUploader
+                                    id="fileUploader"
+                                    name="myFileUpload"
+                                    uploadUrl=""
+                                    buttonOnly="true"
+                                    enabled="{= !${UIModel>savingCustomer}}"
+                                    icon="sap-icon://camera"
+                                    buttonText="{i18n>selPicture}"
+                                    tooltip="Select a Picture"
+                                    change="handleValueChange"
+                                    fileType="jpeg,jpg,png" />
+                            </HBox>
+                            <VBox class="sapUiSmallMargin" >
+                                <HBox class="sapUiSmallMargin" visible="{UIModel>/busy}" busy="{UIModel>/busy}" >
+                                    <Label text="" />
+                                </HBox>
+                                <f:SimpleForm id="SimpleFormToolbar"
+                                    visible="{= !${UIModel>/showCamera} }"
+                                    busy="{${UIModel>/savingCustomer}"
+                                    editable="true"
+                                    layout="ResponsiveGridLayout"
+                                    labelSpanXL="4"
+                                    labelSpanL="3"
+                                    labelSpanM="4"
+                                    labelSpanS="12"
+                                    adjustLabelSpan="false"
+                                    emptySpanXL="0"
+                                    emptySpanL="4"
+                                    emptySpanM="0"
+                                    emptySpanS="0"
+                                    columnsXL="2"
+                                    columnsL="1"
+                                    columnsM="1"
+                                    singleContainerFullSize="false"
+                                    ariaLabelledBy="Title1" >
+                                    <f:content>
+                                        <Label text="{i18n>cardName}" />
+                                        <Input value="{UIModel>/cardInfo/NAME/0}" />
+                                        <Label text="{i18n>cardTitle}" />
+                                        <Input value="{UIModel>/cardInfo/TITLE/0}" />
+                                        <Label text="{i18n>cardCompany}" />
+                                        <Input value="{UIModel>/cardInfo/COMPANY/0}" />
+                                        <Label text="{i18n>cardAddr}" />
+                                        <Input value="{UIModel>/cardInfo/ADDR/0}" />
+                                        <Label text="{i18n>cardPC}" />
+                                        <Input value="{UIModel>/cardInfo/PC/0}" />
+                                        <Label text="{i18n>cardMobile}" />
+                                        <Input value="{UIModel>/cardInfo/MOBILE/0}" />
+                                        <Label text="{i18n>cardTel}" />
+                                        <Input value="{UIModel>/cardInfo/TEL/0}" />
+                                        <Label text="{i18n>cardFax}" />
+                                        <Input value="{UIModel>/cardInfo/FAX/0}" />
+                                        <Label text="{i18n>cardEmail}" />
+                                        <Input value="{UIModel>/cardInfo/EMAIL/0}" />
+                                        <Label text="{i18n>cardUrl}" />
+                                        <Input value="{UIModel>/cardInfo/URL/0}" />
+
+                                    </f:content>
+                                </f:SimpleForm>
+                            </VBox>
+                            <HBox visible="{= !${UIModel>/showCamera} }">
+                            <!-- <Button icon="sap-icon://camera" press="onStartScan" text="{i18n>scanCardRetry}" ariaLabelledBy="actionButtonLabel"/> -->
+                                <u:FileUploader
+                                id="fileUploader2"
+                                name="myFileUpload2"
+                                uploadUrl=""
+                                buttonOnly="true"
+                                icon="sap-icon://camera"
+                                buttonText="{i18n>scanCardRetry}"
+                                tooltip="Retry"
+                                change="handleValueChange"
+                                fileType="jpeg,jpg,png" />
+
+                                <Button enabled="{= !${UIModel>/savingCustomer} }" icon="sap-icon://accept" press="onSaveCard" text="{i18n>saveCard}" ariaLabelledBy="actionButtonLabel"/>
+                            </HBox>
+                        </VBox>
+                    </content>
+                </Page>
+            </pages>
+		</App>
+	</Shell>
+</mvc:View>
