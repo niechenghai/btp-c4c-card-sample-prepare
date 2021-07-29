@@ -5,6 +5,7 @@
     {
         "source": "^/c4cforcard/(.*)",
         "target": "/$1",
+        "authenticationType": "none",
         "destination": "C4C_FOR_CARD"
     },
     {
