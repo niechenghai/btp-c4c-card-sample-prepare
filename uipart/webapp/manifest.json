@@ -13,7 +13,7 @@
     "ach": "ach",
     "dataSources": {
         "mainService": {
-            "uri": "c4c",
+            "uri": "c4cforcard",
             "type": "OData",
             "settings": {
                 "odataVersion": "2.0"

@@ -3,7 +3,7 @@
   "authenticationMethod": "route",
   "routes": [
     {
-        "source": "^/c4c/(.*)",
+        "source": "^/c4cforcard/(.*)",
         "target": "/$1",
         "destination": "C4C_FOR_CARD"
     },
