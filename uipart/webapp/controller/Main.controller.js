@@ -91,8 +91,8 @@ sap.ui.define([
                     }.bind(this)).always(function(jqXHR, textStatus) {
                         this.oUIModel.setProperty("/showCamera", false);
                         this.oUIModel.setProperty("/busy", false);
-                        var oCamera = this.getView().byId("idCamera");
-                        oCamera.stopCamera();
+                        // var oCamera = this.getView().byId("idCamera");
+                        // oCamera.stopCamera();
                     }.bind(this));
                 // }.bind(this));
             },
